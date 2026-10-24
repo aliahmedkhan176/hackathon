@@ -1,0 +1,2 @@
+-- Generated executable query. Run with SQLite against indus_weave.db.
+SELECT month,department_name,computed_overtime_value computed_hours,paid_overtime_value paid_hours,ROUND(100.0*(paid_overtime_value-computed_overtime_value)/NULLIF(computed_overtime_value,0),2) excess_pct FROM staging_overtime_reconciliation WHERE computed_overtime_value>0 AND paid_overtime_value>computed_overtime_value*1.15 ORDER BY month,excess_pct DESC;

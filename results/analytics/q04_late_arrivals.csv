@@ -1,0 +1,11 @@
+emp_id,employee_name,department_name,late_arrival_days,total_late_minutes
+E10982,Adnan Akhtar,Production Planning,49,1442
+E11122,Imran Hashmi,Human Resources,43,1310
+E11019,Areeba Khan,Cutting,42,1200
+E10580,Usman Gill,Cutting,41,1473
+E10286,Nida Ansari,Administration,39,1400
+E10707,Iqra Chaudhry,Supply Chain,38,1246
+E10984,Ahmed Qureshi,Weaving,37,1268
+E10173,Sohail Awan,Stitching,37,1232
+E11179,Faisal Malik,Finance,35,1400
+E10827,Sajid Abbasi,Weaving,35,1235

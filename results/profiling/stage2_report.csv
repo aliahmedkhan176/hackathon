@@ -1,0 +1,6 @@
+check,input_rows,output_rows,removed_rows,status,detail,input_requests,eligible_requests,approved_leave_days,input_punches,mapped_punches,rejected_unmapped,duplicate_punches_removed,retained_mapped_punches
+employee_deduplication,1316.0,1266.0,50.0,PASS,Kept latest updated_at per emp_id; see employee_dedup_audit.csv,,,,,,,,
+employment_history_same_day_deduplication,3686.0,3685.0,1.0,PASS,"For duplicate emp_id/effective_from, kept the last source row; see employment_history_dedup_audit.csv",,,,,,,,
+leave_eligibility,,,,PASS,Requires Manager + HR Approved and cancelled_at empty; excludes Sundays and scoped holidays from leave days,5372.0,4282.0,8604.0,,,,,
+punch_mapping,,,,PASS,Mapping uses composite device_id + device_user_id; duplicate rule compares each punch with previous retained employee punch,,,,345280.0,338318.0,6962.0,16175.0,322143.0
+device_clock_offset,,,,CORRECTED,DEV-SITE-01 timestamps from 2026-07-01 onward shifted +60 minutes relative to Apr-Jun boundary clusters (06/14/22 became 07/15/23 with 00:xx spillover). Subtracted 60 minutes; see device_clock_corrections.csv and punch_clock_correction_audit.csv. Raw source remains unchanged.,,,,,,,,

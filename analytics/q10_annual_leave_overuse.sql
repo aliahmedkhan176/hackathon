@@ -1,0 +1,2 @@
+-- Generated executable query. Run with SQLite against indus_weave.db.
+WITH used AS (SELECT emp_id,COUNT(*) approved_annual_leave_days FROM fact_leave_day l JOIN dim_date d ON d.date_key=l.date_key WHERE lower(l.leave_type) IN ('annual','annual leave') AND d.full_date BETWEEN '2026-04-01' AND '2026-09-30' GROUP BY emp_id) SELECT u.emp_id,u.approved_annual_leave_days,e.annual_leave_entitlement_days FROM used u JOIN staging_employee_entitlement e ON e.emp_id=u.emp_id WHERE u.approved_annual_leave_days>e.annual_leave_entitlement_days ORDER BY u.approved_annual_leave_days DESC;

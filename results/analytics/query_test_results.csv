@@ -1,0 +1,11 @@
+query,status,rows,columns
+q01_headcount,PASS,150,4
+q02_attrition,PASS,114,5
+q03_absenteeism,PASS,24,5
+q04_late_arrivals,PASS,10,5
+q05_overtime_reconciliation,PASS,114,6
+q06_paid_ot_exceeds_computed,PASS,0,5
+q07_paid_zero_attendance,PASS,59,4
+q08_paid_after_separation,PASS,126,5
+q09_payroll_cost_mom,PASS,150,7
+q10_annual_leave_overuse,PASS,20,3

@@ -1,0 +1,570 @@
+{
+  "metrics": {
+    "employees": 1266,
+    "attendance_records": 217584,
+    "present_days": 146865,
+    "absent_days": 4744,
+    "missing_punch_days": 26592,
+    "late_minutes": 226603,
+    "computed_overtime_hours": 133718.5,
+    "payroll_earnings": 695019178.0,
+    "approved_ot_hours": 36401.5,
+    "paid_ot_hours": 36401.5
+  },
+  "monthly": [
+    {
+      "month": "2026-04",
+      "present": 25873,
+      "absent": 825,
+      "missing": 4178,
+      "late_minutes": 40667,
+      "overtime": 19995.5
+    },
+    {
+      "month": "2026-05",
+      "present": 21900,
+      "absent": 712,
+      "missing": 4866,
+      "late_minutes": 35247,
+      "overtime": 27014.0
+    },
+    {
+      "month": "2026-06",
+      "present": 23295,
+      "absent": 803,
+      "missing": 4707,
+      "late_minutes": 36212,
+      "overtime": 20417.0
+    },
+    {
+      "month": "2026-07",
+      "present": 26993,
+      "absent": 829,
+      "missing": 3767,
+      "late_minutes": 39642,
+      "overtime": 20650.0
+    },
+    {
+      "month": "2026-08",
+      "present": 23266,
+      "absent": 760,
+      "missing": 5301,
+      "late_minutes": 35836,
+      "overtime": 25441.5
+    },
+    {
+      "month": "2026-09",
+      "present": 25538,
+      "absent": 815,
+      "missing": 3773,
+      "late_minutes": 38999,
+      "overtime": 20200.5
+    }
+  ],
+  "plants": [
+    {
+      "plant": "Korangi Plant",
+      "records": 68653,
+      "present": 46172,
+      "absent": 1390,
+      "missing": 8847
+    },
+    {
+      "plant": "Faisalabad Plant",
+      "records": 67366,
+      "present": 44296,
+      "absent": 1790,
+      "missing": 9264
+    },
+    {
+      "plant": "SITE Plant",
+      "records": 59782,
+      "present": 39962,
+      "absent": 1221,
+      "missing": 8216
+    },
+    {
+      "plant": "Head Office",
+      "records": 21783,
+      "present": 16435,
+      "absent": 343,
+      "missing": 265
+    }
+  ],
+  "payroll_departments": [
+    {
+      "department": "Stitching",
+      "payroll": 77111516.0
+    },
+    {
+      "department": "Weaving",
+      "payroll": 65712699.0
+    },
+    {
+      "department": "Spinning",
+      "payroll": 56928212.0
+    },
+    {
+      "department": "Dyeing",
+      "payroll": 54972368.0
+    },
+    {
+      "department": "Maintenance",
+      "payroll": 52631844.0
+    },
+    {
+      "department": "Quality Control",
+      "payroll": 51131507.0
+    },
+    {
+      "department": "Finishing",
+      "payroll": 49337406.0
+    },
+    {
+      "department": "Cutting",
+      "payroll": 39717477.0
+    }
+  ],
+  "dq": [
+    {
+      "check_name": "raw_input_tables_present",
+      "table_name": "raw_*",
+      "failed_rows": 0,
+      "status": "PASS",
+      "details": "found=12"
+    },
+    {
+      "check_name": "raw_metadata_columns",
+      "table_name": "raw_applications",
+      "failed_rows": 0,
+      "status": "PASS",
+      "details": "missing=[]"
+    },
+    {
+      "check_name": "raw_hash_not_null_and_unique",
+      "table_name": "raw_applications",
+      "failed_rows": 0,
+      "status": "PASS",
+      "details": "null_or_empty=0; duplicate_hash_groups=0"
+    },
+    {
+      "check_name": "raw_metadata_columns",
+      "table_name": "raw_biometric_punches",
+      "failed_rows": 0,
+      "status": "PASS",
+      "details": "missing=[]"
+    },
+    {
+      "check_name": "raw_hash_not_null_and_unique",
+      "table_name": "raw_biometric_punches",
+      "failed_rows": 0,
+      "status": "PASS",
+      "details": "null_or_empty=0; duplicate_hash_groups=0"
+    },
+    {
+      "check_name": "raw_metadata_columns",
+      "table_name": "raw_departments",
+      "failed_rows": 0,
+      "status": "PASS",
+      "details": "missing=[]"
+    },
+    {
+      "check_name": "raw_hash_not_null_and_unique",
+      "table_name": "raw_departments",
+      "failed_rows": 0,
+      "status": "PASS",
+      "details": "null_or_empty=0; duplicate_hash_groups=0"
+    },
+    {
+      "check_name": "raw_metadata_columns",
+      "table_name": "raw_device_mapping",
+      "failed_rows": 0,
+      "status": "PASS",
+      "details": "missing=[]"
+    },
+    {
+      "check_name": "raw_hash_not_null_and_unique",
+      "table_name": "raw_device_mapping",
+      "failed_rows": 0,
+      "status": "PASS",
+      "details": "null_or_empty=0; duplicate_hash_groups=0"
+    },
+    {
+      "check_name": "raw_metadata_columns",
+      "table_name": "raw_employees",
+      "failed_rows": 0,
+      "status": "PASS",
+      "details": "missing=[]"
+    },
+    {
+      "check_name": "raw_hash_not_null_and_unique",
+      "table_name": "raw_employees",
+      "failed_rows": 0,
+      "status": "PASS",
+      "details": "null_or_empty=0; duplicate_hash_groups=0"
+    },
+    {
+      "check_name": "raw_metadata_columns",
+      "table_name": "raw_employment_history",
+      "failed_rows": 0,
+      "status": "PASS",
+      "details": "missing=[]"
+    },
+    {
+      "check_name": "raw_hash_not_null_and_unique",
+      "table_name": "raw_employment_history",
+      "failed_rows": 0,
+      "status": "PASS",
+      "details": "null_or_empty=0; duplicate_hash_groups=0"
+    },
+    {
+      "check_name": "raw_metadata_columns",
+      "table_name": "raw_holidays",
+      "failed_rows": 0,
+      "status": "PASS",
+      "details": "missing=[]"
+    },
+    {
+      "check_name": "raw_hash_not_null_and_unique",
+      "table_name": "raw_holidays",
+      "failed_rows": 0,
+      "status": "PASS",
+      "details": "null_or_empty=0; duplicate_hash_groups=0"
+    },
+    {
+      "check_name": "raw_metadata_columns",
+      "table_name": "raw_leave_requests",
+      "failed_rows": 0,
+      "status": "PASS",
+      "details": "missing=[]"
+    },
+    {
+      "check_name": "raw_hash_not_null_and_unique",
+      "table_name": "raw_leave_requests",
+      "failed_rows": 0,
+      "status": "PASS",
+      "details": "null_or_empty=0; duplicate_hash_groups=0"
+    },
+    {
+      "check_name": "raw_metadata_columns",
+      "table_name": "raw_overtime_requests",
+      "failed_rows": 0,
+      "status": "PASS",
+      "details": "missing=[]"
+    },
+    {
+      "check_name": "raw_hash_not_null_and_unique",
+      "table_name": "raw_overtime_requests",
+      "failed_rows": 0,
+      "status": "PASS",
+      "details": "null_or_empty=0; duplicate_hash_groups=0"
+    },
+    {
+      "check_name": "raw_metadata_columns",
+      "table_name": "raw_payroll_lines",
+      "failed_rows": 0,
+      "status": "PASS",
+      "details": "missing=[]"
+    },
+    {
+      "check_name": "raw_hash_not_null_and_unique",
+      "table_name": "raw_payroll_lines",
+      "failed_rows": 0,
+      "status": "PASS",
+      "details": "null_or_empty=0; duplicate_hash_groups=0"
+    },
+    {
+      "check_name": "raw_metadata_columns",
+      "table_name": "raw_shift_roster",
+      "failed_rows": 0,
+      "status": "PASS",
+      "details": "missing=[]"
+    },
+    {
+      "check_name": "raw_hash_not_null_and_unique",
+      "table_name": "raw_shift_roster",
+      "failed_rows": 0,
+      "status": "PASS",
+      "details": "null_or_empty=0; duplicate_hash_groups=0"
+    },
+    {
+      "check_name": "raw_metadata_columns",
+      "table_name": "raw_shifts",
+      "failed_rows": 0,
+      "status": "PASS",
+      "details": "missing=[]"
+    },
+    {
+      "check_name": "raw_hash_not_null_and_unique",
+      "table_name": "raw_shifts",
+      "failed_rows": 0,
+      "status": "PASS",
+      "details": "null_or_empty=0; duplicate_hash_groups=0"
+    },
+    {
+      "check_name": "raw_to_staging_reconciliation",
+      "table_name": "raw_applications",
+      "failed_rows": 0,
+      "status": "PASS",
+      "details": "raw=3835; outputs=[3835]; staged_plus_rejected=3835; missing_outputs=[]"
+    },
+    {
+      "check_name": "raw_to_staging_reconciliation",
+      "table_name": "raw_biometric_punches",
+      "failed_rows": 0,
+      "status": "PASS",
+      "details": "raw=345280; outputs=[322143, 6962, 16175]; staged_plus_rejected=345280; missing_outputs=[]"
+    },
+    {
+      "check_name": "raw_to_staging_reconciliation",
+      "table_name": "raw_departments",
+      "failed_rows": 0,
+      "status": "PASS",
+      "details": "raw=25; outputs=[25]; staged_plus_rejected=25; missing_outputs=[]"
+    },
+    {
+      "check_name": "raw_to_staging_reconciliation",
+      "table_name": "raw_device_mapping",
+      "failed_rows": 0,
+      "status": "PASS",
+      "details": "raw=1260; outputs=[1260]; staged_plus_rejected=1260; missing_outputs=[]"
+    },
+    {
+      "check_name": "raw_to_staging_reconciliation",
+      "table_name": "raw_employees",
+      "failed_rows": 0,
+      "status": "PASS",
+      "details": "raw=1316; outputs=[1266, 50]; staged_plus_rejected=1316; missing_outputs=[]"
+    },
+    {
+      "check_name": "raw_to_staging_reconciliation",
+      "table_name": "raw_employment_history",
+      "failed_rows": 0,
+      "status": "PASS",
+      "details": "raw=3686; outputs=[3685, 1]; staged_plus_rejected=3686; missing_outputs=[]"
+    },
+    {
+      "check_name": "raw_to_staging_reconciliation",
+      "table_name": "raw_holidays",
+      "failed_rows": 0,
+      "status": "PASS",
+      "details": "raw=12; outputs=[12]; staged_plus_rejected=12; missing_outputs=[]"
+    },
+    {
+      "check_name": "raw_to_staging_reconciliation",
+      "table_name": "raw_leave_requests",
+      "failed_rows": 0,
+      "status": "PASS",
+      "details": "raw=5372; outputs=[5372]; staged_plus_rejected=5372; missing_outputs=[]"
+    },
+    {
+      "check_name": "raw_to_staging_reconciliation",
+      "table_name": "raw_overtime_requests",
+      "failed_rows": 0,
+      "status": "PASS",
+      "details": "raw=22098; outputs=[22098]; staged_plus_rejected=22098; missing_outputs=[]"
+    },
+    {
+      "check_name": "raw_to_staging_reconciliation",
+      "table_name": "raw_payroll_lines",
+      "failed_rows": 0,
+      "status": "PASS",
+      "details": "raw=53617; outputs=[53617]; staged_plus_rejected=53617; missing_outputs=[]"
+    },
+    {
+      "check_name": "raw_to_staging_reconciliation",
+      "table_name": "raw_shift_roster",
+      "failed_rows": 0,
+      "status": "PASS",
+      "details": "raw=36402; outputs=[36402]; staged_plus_rejected=36402; missing_outputs=[]"
+    },
+    {
+      "check_name": "raw_to_warehouse_reconciliation",
+      "table_name": "raw_shifts",
+      "failed_rows": 0,
+      "status": "PASS",
+      "details": "source_shift_definitions=4; warehouse_shifts=4"
+    },
+    {
+      "check_name": "primary_key_not_null_unique",
+      "table_name": "dim_department",
+      "failed_rows": 0,
+      "status": "PASS",
+      "details": "primary_key=['department_key']; null_rows=0; duplicate_groups=0"
+    },
+    {
+      "check_name": "primary_key_not_null_unique",
+      "table_name": "dim_shift",
+      "failed_rows": 0,
+      "status": "PASS",
+      "details": "primary_key=['shift_key']; null_rows=0; duplicate_groups=0"
+    },
+    {
+      "check_name": "primary_key_not_null_unique",
+      "table_name": "dim_date",
+      "failed_rows": 0,
+      "status": "PASS",
+      "details": "primary_key=['date_key']; null_rows=0; duplicate_groups=0"
+    },
+    {
+      "check_name": "primary_key_not_null_unique",
+      "table_name": "dim_employee",
+      "failed_rows": 0,
+      "status": "PASS",
+      "details": "primary_key=['employee_key']; null_rows=0; duplicate_groups=0"
+    },
+    {
+      "check_name": "primary_key_not_null_unique",
+      "table_name": "fact_attendance_daily",
+      "failed_rows": 0,
+      "status": "PASS",
+      "details": "primary_key=['attendance_key']; null_rows=0; duplicate_groups=0"
+    },
+    {
+      "check_name": "primary_key_not_null_unique",
+      "table_name": "fact_leave_day",
+      "failed_rows": 0,
+      "status": "PASS",
+      "details": "primary_key=['leave_day_key']; null_rows=0; duplicate_groups=0"
+    },
+    {
+      "check_name": "primary_key_not_null_unique",
+      "table_name": "fact_overtime_approved",
+      "failed_rows": 0,
+      "status": "PASS",
+      "details": "primary_key=['overtime_key']; null_rows=0; duplicate_groups=0"
+    },
+    {
+      "check_name": "primary_key_not_null_unique",
+      "table_name": "fact_payroll_line",
+      "failed_rows": 0,
+      "status": "PASS",
+      "details": "primary_key=['payroll_line_key']; null_rows=0; duplicate_groups=0"
+    },
+    {
+      "check_name": "foreign_key_integrity",
+      "table_name": "warehouse",
+      "failed_rows": 0,
+      "status": "PASS",
+      "details": "violations=0"
+    },
+    {
+      "check_name": "accepted_attendance_status",
+      "table_name": "fact_attendance_daily",
+      "failed_rows": 0,
+      "status": "PASS",
+      "details": "allowed statuses follow case-study rule 12"
+    },
+    {
+      "check_name": "accepted_leave_type",
+      "table_name": "fact_leave_day",
+      "failed_rows": 0,
+      "status": "PASS",
+      "details": "allowed values sourced from cleaned leave requests (3 types)"
+    },
+    {
+      "check_name": "accepted_pay_component",
+      "table_name": "fact_payroll_line",
+      "failed_rows": 0,
+      "status": "PASS",
+      "details": "allowed=['BASIC', 'HOUSE_RENT', 'MEDICAL', 'CONVEYANCE', 'OVERTIME', 'INCOME_TAX', 'EOBI', 'ABSENCE_DEDUCTION', 'LOAN_INSTALLMENT']"
+    },
+    {
+      "check_name": "scd2_ranges_do_not_overlap",
+      "table_name": "dim_employee",
+      "failed_rows": 0,
+      "status": "PASS",
+      "details": "validity intervals are inclusive"
+    },
+    {
+      "check_name": "shift_duration_at_most_16_hours",
+      "table_name": "dim_shift",
+      "failed_rows": 0,
+      "status": "PASS",
+      "details": "duration is computed from local start/end and crosses_midnight"
+    },
+    {
+      "check_name": "business_sanity_nonnegative",
+      "table_name": "warehouse_facts",
+      "failed_rows": 0,
+      "status": "PASS",
+      "details": "worked/approved OT hours and payroll amounts must be nonnegative"
+    },
+    {
+      "check_name": "attendance_fact_reconciles_to_stage",
+      "table_name": "warehouse",
+      "failed_rows": 0,
+      "status": "PASS",
+      "details": "warehouse=217584; staging=217584"
+    },
+    {
+      "check_name": "payroll_fact_reconciles_to_stage",
+      "table_name": "warehouse",
+      "failed_rows": 0,
+      "status": "PASS",
+      "details": "warehouse=53617; staging=53617"
+    }
+  ],
+  "query_tests": [
+    {
+      "query": "q01_headcount",
+      "status": "PASS",
+      "rows": 150,
+      "columns": 4
+    },
+    {
+      "query": "q02_attrition",
+      "status": "PASS",
+      "rows": 114,
+      "columns": 5
+    },
+    {
+      "query": "q03_absenteeism",
+      "status": "PASS",
+      "rows": 24,
+      "columns": 5
+    },
+    {
+      "query": "q04_late_arrivals",
+      "status": "PASS",
+      "rows": 10,
+      "columns": 5
+    },
+    {
+      "query": "q05_overtime_reconciliation",
+      "status": "PASS",
+      "rows": 114,
+      "columns": 6
+    },
+    {
+      "query": "q06_paid_ot_exceeds_computed",
+      "status": "PASS",
+      "rows": 0,
+      "columns": 5
+    },
+    {
+      "query": "q07_paid_zero_attendance",
+      "status": "PASS",
+      "rows": 59,
+      "columns": 4
+    },
+    {
+      "query": "q08_paid_after_separation",
+      "status": "PASS",
+      "rows": 126,
+      "columns": 5
+    },
+    {
+      "query": "q09_payroll_cost_mom",
+      "status": "PASS",
+      "rows": 150,
+      "columns": 7
+    },
+    {
+      "query": "q10_annual_leave_overuse",
+      "status": "PASS",
+      "rows": 20,
+      "columns": 3
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+stage,applications_reaching_stage,next_stage,applications_reaching_next_stage,conversion_to_next_pct,median_days_to_next_stage
+Applied,1400,Screened,682.0,48.71,9.0
+Screened,682,Interviewed,263.0,38.56,8.0
+Interviewed,263,Offered,90.0,34.22,9.0
+Offered,90,Hired,74.0,82.22,8.0
+Hired,74,,,,
+Rejected,1310,,,,
+Offer Declined,16,,,,

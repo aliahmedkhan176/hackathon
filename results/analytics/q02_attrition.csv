@@ -1,0 +1,115 @@
+month_start,department_name,separations,average_headcount,attrition_rate_pct
+2026-04-01,Administration,0,18.0,0.0
+2026-04-01,Compliance,0,12.0,0.0
+2026-04-01,Cutting,1,80.5,1.24
+2026-04-01,Dyeing,0,111.5,0.0
+2026-04-01,Finance,1,19.5,5.13
+2026-04-01,Finishing,0,100.0,0.0
+2026-04-01,Human Resources,2,15.0,13.33
+2026-04-01,IT,0,14.0,0.0
+2026-04-01,Maintenance,0,39.5,0.0
+2026-04-01,Packing,2,60.0,3.33
+2026-04-01,Production Planning,0,25.0,0.0
+2026-04-01,Quality Control,1,35.0,2.86
+2026-04-01,Sales & Marketing,0,22.5,0.0
+2026-04-01,Spinning,1,119.5,0.84
+2026-04-01,Stitching,2,149.0,1.34
+2026-04-01,Supply Chain,0,18.0,0.0
+2026-04-01,Utilities,0,30.0,0.0
+2026-04-01,Warehouse,0,30.0,0.0
+2026-04-01,Weaving,4,131.0,3.05
+2026-05-01,Administration,0,18.0,0.0
+2026-05-01,Compliance,1,12.0,8.33
+2026-05-01,Cutting,0,80.0,0.0
+2026-05-01,Dyeing,3,111.5,2.69
+2026-05-01,Finance,0,19.0,0.0
+2026-05-01,Finishing,1,99.5,1.01
+2026-05-01,Human Resources,0,14.0,0.0
+2026-05-01,IT,0,14.0,0.0
+2026-05-01,Maintenance,0,40.5,0.0
+2026-05-01,Packing,1,58.5,1.71
+2026-05-01,Production Planning,0,25.0,0.0
+2026-05-01,Quality Control,0,36.0,0.0
+2026-05-01,Sales & Marketing,0,23.5,0.0
+2026-05-01,Spinning,3,117.5,2.55
+2026-05-01,Stitching,2,148.5,1.35
+2026-05-01,Supply Chain,0,18.0,0.0
+2026-05-01,Utilities,1,30.0,3.33
+2026-05-01,Warehouse,2,29.5,6.78
+2026-05-01,Weaving,2,130.5,1.53
+2026-06-01,Administration,0,18.0,0.0
+2026-06-01,Compliance,0,11.5,0.0
+2026-06-01,Cutting,0,80.0,0.0
+2026-06-01,Dyeing,1,111.5,0.9
+2026-06-01,Finance,0,19.0,0.0
+2026-06-01,Finishing,1,99.0,1.01
+2026-06-01,Human Resources,0,14.0,0.0
+2026-06-01,IT,0,14.5,0.0
+2026-06-01,Maintenance,2,42.0,4.76
+2026-06-01,Packing,2,57.0,3.51
+2026-06-01,Production Planning,0,25.0,0.0
+2026-06-01,Quality Control,0,38.0,0.0
+2026-06-01,Sales & Marketing,0,24.0,0.0
+2026-06-01,Spinning,0,115.0,0.0
+2026-06-01,Stitching,3,147.5,2.03
+2026-06-01,Supply Chain,0,19.5,0.0
+2026-06-01,Utilities,1,30.0,3.33
+2026-06-01,Warehouse,1,28.5,3.51
+2026-06-01,Weaving,3,129.0,2.33
+2026-07-01,Administration,0,18.0,0.0
+2026-07-01,Compliance,0,11.5,0.0
+2026-07-01,Cutting,1,79.5,1.26
+2026-07-01,Dyeing,3,109.5,2.74
+2026-07-01,Finance,0,19.0,0.0
+2026-07-01,Finishing,2,98.5,2.03
+2026-07-01,Human Resources,0,13.5,0.0
+2026-07-01,IT,2,14.0,14.29
+2026-07-01,Maintenance,4,42.0,9.52
+2026-07-01,Packing,2,55.0,3.64
+2026-07-01,Production Planning,1,24.5,4.08
+2026-07-01,Quality Control,4,38.5,10.39
+2026-07-01,Sales & Marketing,0,24.0,0.0
+2026-07-01,Spinning,1,114.0,0.88
+2026-07-01,Stitching,0,147.5,0.0
+2026-07-01,Supply Chain,1,20.5,4.88
+2026-07-01,Utilities,1,30.0,3.33
+2026-07-01,Warehouse,3,28.0,10.71
+2026-07-01,Weaving,1,127.0,0.79
+2026-08-01,Administration,0,18.0,0.0
+2026-08-01,Compliance,0,12.0,0.0
+2026-08-01,Cutting,2,78.0,2.56
+2026-08-01,Dyeing,1,107.0,0.93
+2026-08-01,Finance,0,19.0,0.0
+2026-08-01,Finishing,0,98.0,0.0
+2026-08-01,Human Resources,0,13.5,0.0
+2026-08-01,IT,0,13.0,0.0
+2026-08-01,Maintenance,1,42.0,2.38
+2026-08-01,Packing,0,56.0,0.0
+2026-08-01,Production Planning,1,23.5,4.26
+2026-08-01,Quality Control,0,38.0,0.0
+2026-08-01,Sales & Marketing,1,24.0,4.17
+2026-08-01,Spinning,0,114.5,0.0
+2026-08-01,Stitching,2,148.5,1.35
+2026-08-01,Supply Chain,0,19.5,0.0
+2026-08-01,Utilities,0,31.0,0.0
+2026-08-01,Warehouse,0,28.0,0.0
+2026-08-01,Weaving,1,126.0,0.79
+2026-09-01,Administration,0,18.5,0.0
+2026-09-01,Compliance,0,12.0,0.0
+2026-09-01,Cutting,2,77.0,2.6
+2026-09-01,Dyeing,1,106.5,0.94
+2026-09-01,Finance,0,19.0,0.0
+2026-09-01,Finishing,1,97.5,1.03
+2026-09-01,Human Resources,0,14.0,0.0
+2026-09-01,IT,0,13.0,0.0
+2026-09-01,Maintenance,2,41.0,4.88
+2026-09-01,Packing,1,57.5,1.74
+2026-09-01,Production Planning,0,23.0,0.0
+2026-09-01,Quality Control,1,38.0,2.63
+2026-09-01,Sales & Marketing,0,24.0,0.0
+2026-09-01,Spinning,1,115.0,0.87
+2026-09-01,Stitching,2,147.0,1.36
+2026-09-01,Supply Chain,0,19.0,0.0
+2026-09-01,Utilities,0,32.0,0.0
+2026-09-01,Warehouse,0,28.0,0.0
+2026-09-01,Weaving,0,126.0,0.0

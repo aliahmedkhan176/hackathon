@@ -1,0 +1,132 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="800" viewBox="0 0 1280 800" role="img" aria-labelledby="title description">
+  <title id="title">PeopleOps HR warehouse entity relationship diagram</title>
+  <desc id="description">Four dimensions connect to attendance, leave, approved overtime, and payroll facts in a SQLite star schema.</desc>
+  <defs>
+    <style>
+      text{font-family:Segoe UI,Arial,sans-serif;fill:#eef4ff}
+      .title{font-size:27px;font-weight:700}
+      .subtitle{font-size:13px;fill:#9fb2ce}
+      .entity{fill:#111b2d;stroke:#35506d;stroke-width:2}
+      .fact{fill:#142b34;stroke:#45b9aa;stroke-width:2}
+      .head{font-size:15px;font-weight:700;fill:#5eead4}
+      .field{font-size:12px}
+      .key{font-size:10px;fill:#fbbf24;font-weight:700}
+      .relation{fill:none;stroke:#8ea0bd;stroke-width:2}
+      .cardinality{font-size:11px;fill:#c5d3e8}
+      .legend{font-size:11px;fill:#9fb2ce}
+    </style>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="#8ea0bd"/>
+    </marker>
+  </defs>
+  <rect width="1280" height="800" fill="#080d19"/>
+  <text x="40" y="42" class="title">PeopleOps HR Warehouse — Star Schema</text>
+  <text x="40" y="64" class="subtitle">SQLite implementation | primary and foreign keys enforced | employee dimension is effective-dated (SCD Type 2)</text>
+
+  <g class="relation">
+    <path d="M290 155 H390" marker-end="url(#arrow)"/>
+    <path d="M540 290 V365 H540 V440" marker-end="url(#arrow)"/>
+    <path d="M165 520 V395 H390 V540" marker-end="url(#arrow)"/>
+    <path d="M920 155 H850 V395 H690 V470" marker-end="url(#arrow)"/>
+    <path d="M690 210 H760" marker-end="url(#arrow)"/>
+    <path d="M290 585 H340 V720 H720 V370 H760" marker-end="url(#arrow)"/>
+    <path d="M690 240 H730 V520 H760" marker-end="url(#arrow)"/>
+    <path d="M290 625 H320 V750 H990 V660" marker-end="url(#arrow)"/>
+    <path d="M690 260 H740 V750 H1110 V660" marker-end="url(#arrow)"/>
+  </g>
+
+  <g>
+    <text x="320" y="145" class="cardinality">1 : many</text>
+    <text x="555" y="385" class="cardinality">1 : many</text>
+    <text x="245" y="385" class="cardinality">1 : many</text>
+    <text x="845" y="385" class="cardinality">1 : many</text>
+    <text x="710" y="202" class="cardinality">1 : many</text>
+    <text x="700" y="725" class="cardinality">1 : many</text>
+    <text x="710" y="510" class="cardinality">1 : many</text>
+    <text x="820" y="742" class="cardinality">1 : many</text>
+    <text x="1000" y="742" class="cardinality">1 : many</text>
+  </g>
+
+  <g transform="translate(40 80)">
+    <rect class="entity" width="250" height="190" rx="10"/>
+    <text x="16" y="28" class="head">DIM_DEPARTMENT</text>
+    <text x="16" y="56" class="key">PK</text><text x="52" y="56" class="field">department_key</text>
+    <text x="52" y="79" class="field">department_id (unique)</text>
+    <text x="52" y="102" class="field">department_name</text>
+    <text x="52" y="125" class="field">plant_name</text>
+    <text x="52" y="148" class="field">cost_center</text>
+  </g>
+
+  <g transform="translate(390 65)">
+    <rect class="entity" width="300" height="245" rx="10"/>
+    <text x="16" y="28" class="head">DIM_EMPLOYEE (SCD2)</text>
+    <text x="16" y="56" class="key">PK</text><text x="52" y="56" class="field">employee_key</text>
+    <text x="16" y="79" class="key">FK</text><text x="52" y="79" class="field">department_key</text>
+    <text x="52" y="102" class="field">emp_id + valid_from (unique)</text>
+    <text x="52" y="125" class="field">employee_name, job_title, grade</text>
+    <text x="52" y="148" class="field">employment_status</text>
+    <text x="52" y="171" class="field">valid_from, valid_to, is_current</text>
+    <text x="52" y="194" class="field">annual_leave_entitlement_days</text>
+    <text x="52" y="217" class="field">hire_date, separation_date</text>
+  </g>
+
+  <g transform="translate(920 80)">
+    <rect class="entity" width="280" height="165" rx="10"/>
+    <text x="16" y="28" class="head">DIM_SHIFT</text>
+    <text x="16" y="56" class="key">PK</text><text x="52" y="56" class="field">shift_key</text>
+    <text x="52" y="79" class="field">shift_id (unique), shift_name</text>
+    <text x="52" y="102" class="field">start_time, end_time</text>
+    <text x="52" y="125" class="field">crosses_midnight, grace_minutes</text>
+  </g>
+
+  <g transform="translate(40 520)">
+    <rect class="entity" width="250" height="175" rx="10"/>
+    <text x="16" y="28" class="head">DIM_DATE</text>
+    <text x="16" y="56" class="key">PK</text><text x="52" y="56" class="field">date_key</text>
+    <text x="52" y="79" class="field">full_date (unique)</text>
+    <text x="52" y="102" class="field">year, month, day</text>
+    <text x="52" y="125" class="field">month_start, month_end</text>
+    <text x="52" y="148" class="field">is_sunday, is_holiday</text>
+  </g>
+
+  <g transform="translate(390 440)">
+    <rect class="fact" width="300" height="260" rx="10"/>
+    <text x="16" y="28" class="head">FACT_ATTENDANCE_DAILY</text>
+    <text x="16" y="56" class="key">PK</text><text x="52" y="56" class="field">attendance_key</text>
+    <text x="16" y="79" class="key">FK</text><text x="52" y="79" class="field">employee_key, date_key, shift_key</text>
+    <text x="52" y="102" class="field">emp_id + date_key (unique)</text>
+    <text x="52" y="125" class="field">status, check_in, check_out</text>
+    <text x="52" y="148" class="field">worked_hours</text>
+    <text x="52" y="171" class="field">late_minutes, early_departure_minutes</text>
+    <text x="52" y="194" class="field">computed_overtime_hours</text>
+  </g>
+
+  <g transform="translate(760 230)">
+    <rect class="fact" width="250" height="155" rx="10"/>
+    <text x="16" y="28" class="head">FACT_PAYROLL_LINE</text>
+    <text x="16" y="56" class="key">PK</text><text x="52" y="56" class="field">payroll_line_key</text>
+    <text x="16" y="79" class="key">FK</text><text x="52" y="79" class="field">employee_key, department_key</text>
+    <text x="52" y="102" class="field">month_start, pay_component</text>
+    <text x="52" y="125" class="field">component_type, units, amount</text>
+  </g>
+
+  <g transform="translate(760 490)">
+    <rect class="fact" width="220" height="165" rx="10"/>
+    <text x="16" y="28" class="head">FACT_LEAVE_DAY</text>
+    <text x="16" y="56" class="key">PK</text><text x="52" y="56" class="field">leave_day_key</text>
+    <text x="16" y="79" class="key">FK</text><text x="52" y="79" class="field">employee_key, date_key</text>
+    <text x="52" y="102" class="field">emp_id, leave_type</text>
+    <text x="52" y="125" class="field">request_id</text>
+  </g>
+
+  <g transform="translate(1010 490)">
+    <rect class="fact" width="230" height="165" rx="10"/>
+    <text x="16" y="28" class="head">FACT_OVERTIME_APPROVED</text>
+    <text x="16" y="56" class="key">PK</text><text x="52" y="56" class="field">overtime_key</text>
+    <text x="16" y="79" class="key">FK</text><text x="52" y="79" class="field">employee_key, date_key</text>
+    <text x="52" y="102" class="field">emp_id, approved_hours</text>
+    <text x="52" y="125" class="field">request_status</text>
+  </g>
+
+  <text x="40" y="770" class="legend">Amber PK/FK labels identify key columns. Dimension → fact relationships are one-to-many.</text>
+</svg>

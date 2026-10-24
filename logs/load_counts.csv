@@ -1,0 +1,13 @@
+source_file,table_name,source_rows,new_rows,table_rows,status
+applications.csv,raw_applications,3835,0,3835,loaded
+biometric_punches.csv,raw_biometric_punches,345280,0,345280,loaded
+departments.csv,raw_departments,25,0,25,loaded
+device_mapping.csv,raw_device_mapping,1260,0,1260,loaded
+employees.csv,raw_employees,1316,0,1316,loaded
+employment_history.csv,raw_employment_history,3686,0,3686,loaded
+holidays.csv,raw_holidays,12,0,12,loaded
+leave_requests.json,raw_leave_requests,5372,0,5372,loaded
+overtime_requests.csv,raw_overtime_requests,22098,0,22098,loaded
+payroll_lines.csv,raw_payroll_lines,53617,0,53617,loaded
+shift_roster.csv,raw_shift_roster,36402,0,36402,loaded
+shifts.json,raw_shifts,1,0,1,loaded

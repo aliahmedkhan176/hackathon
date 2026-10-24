@@ -1,0 +1,25 @@
+plant_name,month,absent_days,scheduled_workdays,absenteeism_pct
+Faisalabad Plant,2026-04,299,9442,3.17
+Head Office,2026-04,54,2986,1.81
+Korangi Plant,2026-04,255,9800,2.6
+SITE Plant,2026-04,217,8648,2.51
+Faisalabad Plant,2026-05,244,8576,2.85
+Head Office,2026-05,54,2518,2.14
+Korangi Plant,2026-05,222,8718,2.55
+SITE Plant,2026-05,192,7666,2.5
+Faisalabad Plant,2026-06,321,9065,3.54
+Head Office,2026-06,54,2742,1.97
+Korangi Plant,2026-06,231,9226,2.5
+SITE Plant,2026-06,197,7772,2.53
+Faisalabad Plant,2026-07,329,9636,3.41
+Head Office,2026-07,57,3103,1.84
+Korangi Plant,2026-07,235,10038,2.34
+SITE Plant,2026-07,208,8812,2.36
+Faisalabad Plant,2026-08,287,9205,3.12
+Head Office,2026-08,59,2713,2.17
+Korangi Plant,2026-08,221,9270,2.38
+SITE Plant,2026-08,193,8139,2.37
+Faisalabad Plant,2026-09,310,9426,3.29
+Head Office,2026-09,65,2981,2.18
+Korangi Plant,2026-09,226,9357,2.42
+SITE Plant,2026-09,214,8362,2.56

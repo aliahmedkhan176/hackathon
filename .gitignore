@@ -1,0 +1,7 @@
+__pycache__/
+*.py[cod]
+
+# Rebuildable local warehouse and high-volume staging extracts.
+indus_weave.db
+results/staging/
+results/attendance/
