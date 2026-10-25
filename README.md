@@ -56,7 +56,9 @@ The incremental load requires a completed initial pipeline build and a CSV with 
 
 ## Team
 
-Add the hackathon team members' names here before submission.
+**Team name:** WeaveOps Analytics
+
+**Team member provided:** Ali Ahmed
 
 ## Business-rule implementation notes
 
