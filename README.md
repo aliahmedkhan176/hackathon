@@ -6,6 +6,7 @@ A reproducible Python + SQLite implementation for the supplied **PeopleOps Data 
 
 - **Dashboard:** open `web/dashboard.html` in Chrome, Edge or Firefox. It is a self-contained responsive page with inline CSS/JavaScript and embedded results; it does not require internet access or a web server.
 - **Presentation:** `presentation/PeopleOps_HR_Pipeline_Results.pptx`
+- **Submission slides PDF:** `presentation/slides.pdf`
 - **Findings:** `presentation/cfo_findings.md`
 - **Build status and caveats:** `PROJECT_STATUS.md`
 - **Database:** `indus_weave.db`
@@ -25,7 +26,15 @@ pip install -r requirements.txt
 python run_pipeline.py
 ```
 
-The pipeline loads raw files idempotently, runs source checks, creates cleaned staging CSVs, reconstructs employee-day attendance, rebuilds the constrained SQLite warehouse, executes the 10 SQL analytics queries, builds the recruitment-funnel bonus output, refreshes the CFO findings/dashboard/six-slide deck, copies the dashboard and deck to `../deliverables/`, and runs the project acceptance tests. The SQLite database and high-volume intermediate staging/attendance CSVs are generated locally and intentionally excluded from Git; the included raw sources and one-command pipeline rebuild them. The full rebuild can take several minutes because the biometric file contains 345,280 events. Run `python tests/validate_project.py` separately whenever you want to rerun the acceptance checks.
+The pipeline loads raw files idempotently, runs source checks, creates cleaned staging CSVs, reconstructs employee-day attendance, rebuilds the constrained SQLite warehouse, executes the 10 SQL analytics queries, builds the recruitment-funnel bonus output, refreshes the CFO findings/dashboard/six-slide deck and PDF, copies the dashboard and both presentation formats to `../deliverables/`, and runs the project acceptance tests. The SQLite database and high-volume intermediate staging/attendance CSVs are generated locally and intentionally excluded from Git; the included raw sources and one-command pipeline rebuild them. The full rebuild can take several minutes because the biometric file contains 345,280 events. Run `python tests/validate_project.py` separately whenever you want to rerun the acceptance checks.
+
+The six-slide PDF is exported from the generated PowerPoint using Microsoft PowerPoint on Windows. To refresh it independently after rebuilding the deck, run `powershell -NoProfile -ExecutionPolicy Bypass -File presentation\export_pdf.ps1`. The incremental punch loader only appends a new punch CSV to the existing raw punch table; it does not reload the other source files or rebuild the six-month scored reports:
+
+```powershell
+python -m ingestion.load_incremental_punches --file "C:\path\to\new_biometric_punches.csv"
+```
+
+The incremental load requires a completed initial pipeline build and a CSV with the same four source columns as `biometric_punches.csv`. It records row counts in `logs/incremental_load_counts.csv`, records its reconciliation in `dq_results`, and can safely be rerun for the same file.
 
 ## Main folders
 
@@ -44,6 +53,10 @@ The pipeline loads raw files idempotently, runs source checks, creates cleaned s
 - `tests/` — post-build validation checks
 - `../deliverables/` — ready-to-submit dashboard and six-slide PowerPoint deck
 - `warehouse/erd.svg` — rendered entity-relationship diagram for the warehouse
+
+## Team
+
+Add the hackathon team members' names here before submission.
 
 ## Business-rule implementation notes
 
@@ -66,5 +79,6 @@ The pipeline loads raw files idempotently, runs source checks, creates cleaned s
 - Punch-computed overtime is an estimate. The difference from approved/paid hours is a review signal, not proof of an error.
 - `q06_paid_ot_exceeds_computed.sql` compares hours to hours. A zero-row result means no department-month crossed the specified 15% threshold; it does not certify every individual payment.
 - Query outputs are generated from the included dataset and the stated rules. There is no answer key in the supplied files, so findings should be treated as evidence-based review flags rather than official hackathon scoring.
+- Q4 counts late-arrival days once per employee, then reports the employee's department at 30 September or their last working day if separated earlier.
 - The employment history includes a same-day duplicate for one employee. Stage 2 keeps the last source row for each employee/effective date, writes the discarded row to `employment_history_dedup_audit.csv`, and reconciles both rows to the raw count.
 - The full automated DQ report is `logs/dq_results.csv` and the corresponding SQLite `dq_results` table. A passing build records primary/foreign-key, raw-to-stage, accepted-value, SCD2 and business-sanity checks.

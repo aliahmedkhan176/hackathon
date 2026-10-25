@@ -6,11 +6,11 @@
 - Stage 2 outputs include deduplicated employees, same-day employment-history resolution, leave approval flattening, mapped/rejected punches, duplicate-punch audit and device-clock correction audit.
 - Attendance reconstructed for 1 April–30 September 2026 with the case-study roster, night-shift, status, late/early and overtime rules.
 - SQLite star schema enforces primary/foreign keys, accepted attendance statuses and basic nonnegative-value constraints.
-- Ten scored SQL queries execute and save their result CSVs; the optional recruitment funnel bonus output is generated.
+- Ten scored SQL queries execute and save their result CSVs; the optional recruitment funnel and idempotent seventh-month raw punch load are implemented.
 - Automated DQ checks cover raw metadata, source-to-staging row reconciliation, warehouse keys/FKs, allowed values, SCD2 overlap, shift duration and business sanity.
-- Dashboard, CFO findings and a six-slide presentation are generated from the rebuilt warehouse. The two submission-ready files are copied to `../deliverables/`.
+- Dashboard, CFO findings and a six-slide presentation are generated from the rebuilt warehouse. Both PowerPoint and PDF submissions, plus the dashboard, are copied to `../deliverables/`.
 - A rendered SVG ER diagram is included at `warehouse/erd.svg`.
-- `python run_pipeline.py` ends by running the project acceptance tests.
+- `python run_pipeline.py` ends by running the project acceptance tests. The PDF export uses Microsoft PowerPoint automation on Windows.
 
 ## Verified snapshot
 - 12 raw input tables, including 345,280 biometric events and 53,617 payroll lines.
@@ -18,7 +18,7 @@
 - Attendance: 146,865 Present; 4,744 Absent; 26,592 Missing Punch; 8,604 On Leave; 21,998 Weekly Off; 8,781 Holiday.
 - Punch-computed OT: 133,718.5 hours; approved OT: 36,401.5 hours; paid OT: 36,401.5 hours.
 - Payroll EARNING components: PKR 695,019,178.
-- All ten scored analytics queries passed; all generated DQ checks passed; all 20 project acceptance tests passed.
+- All ten scored analytics queries passed; all generated DQ checks passed; all 28 project acceptance checks passed.
 
 ## Important interpretation notes
 - The dataset is synthetic, as stated in the supplied data dictionary.

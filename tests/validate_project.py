@@ -1,18 +1,77 @@
 """Post-build acceptance checks. Run: python tests/validate_project.py"""
 from pathlib import Path
 import json
+import csv
 import sqlite3
 import sys
+import tempfile
+from contextlib import closing
 
 import pandas as pd
 from pptx import Presentation
 
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
+
+from ingestion.load_incremental_punches import load_incremental_punches
+
 DELIVERABLES = ROOT.parent / "deliverables"
 DB = ROOT / "indus_weave.db"
 
 
 def main() -> None:
+    incremental_test_passed = False
+    with tempfile.TemporaryDirectory() as temp_dir:
+        temp_root = Path(temp_dir)
+        test_db = temp_root / "incremental_test.db"
+        test_csv = temp_root / "biometric_punches_october.csv"
+        test_log = temp_root / "incremental_load_counts.csv"
+        with closing(sqlite3.connect(test_db)) as conn:
+            conn.executescript(
+                """CREATE TABLE raw_biometric_punches (
+                    punch_id TEXT, device_id TEXT, device_user_id TEXT, punch_time TEXT,
+                    _source_file TEXT NOT NULL, _loaded_at TEXT NOT NULL, _row_hash TEXT NOT NULL,
+                    UNIQUE(_source_file, _row_hash)
+                );
+                CREATE TABLE dq_results (
+                    dq_id INTEGER PRIMARY KEY, check_name TEXT NOT NULL,
+                    table_name TEXT NOT NULL, failed_rows INTEGER NOT NULL,
+                    status TEXT NOT NULL, details TEXT, checked_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+                );
+                INSERT INTO raw_biometric_punches VALUES
+                    ('OLD-1', 'DEV-1', 'U1', '2026-10-01 07:00:00',
+                     'biometric_punches.csv', '2026-10-01T00:00:00+00:00', 'old-hash');"""
+            )
+            conn.commit()
+        with test_csv.open("w", encoding="utf-8", newline="") as file:
+            writer = csv.DictWriter(
+                file, fieldnames=["punch_id", "device_id", "device_user_id", "punch_time"]
+            )
+            writer.writeheader()
+            new_rows = [
+                {"punch_id": "OCT-1", "device_id": "DEV-1", "device_user_id": "U1",
+                 "punch_time": "2026-10-01 07:05:00"},
+                {"punch_id": "OCT-2", "device_id": "DEV-1", "device_user_id": "U1",
+                 "punch_time": "2026-10-01 15:00:00"},
+            ]
+            writer.writerows(new_rows)
+        first_load = load_incremental_punches(test_csv, test_db, test_log)
+        second_load = load_incremental_punches(test_csv, test_db, test_log)
+        with closing(sqlite3.connect(test_db)) as conn:
+            test_counts = conn.execute(
+                "SELECT COUNT(*), SUM(_source_file='biometric_punches.csv') "
+                "FROM raw_biometric_punches"
+            ).fetchone()
+            test_dq = conn.execute(
+                "SELECT COUNT(*) FROM dq_results WHERE status='PASS'"
+            ).fetchone()[0]
+        incremental_test_passed = (
+            first_load["new_rows"] == 2
+            and second_load["new_rows"] == 0
+            and test_counts == (3, 1)
+            and test_dq == 2
+        )
+
     with sqlite3.connect(DB) as conn:
         checks = {
             "all 12 raw source tables loaded": conn.execute(
@@ -43,6 +102,9 @@ def main() -> None:
                 "SELECT COUNT(*) FROM dq_results WHERE status<>'PASS'"
             ).fetchone()[0] == 0,
         }
+    checks["incremental punch load appends only new rows idempotently"] = (
+        incremental_test_passed
+    )
 
     analytics_dir = ROOT / "results" / "analytics"
     query_results_path = analytics_dir / "query_test_results.csv"
@@ -68,6 +130,10 @@ def main() -> None:
                 query_files_execute = False
                 break
     checks["all ten checked-in SQL files execute to their CSV outputs"] = query_files_execute
+    q04 = pd.read_csv(analytics_dir / "q04_late_arrivals.csv")
+    checks["late-arrival ranking returns ten unique employees"] = (
+        len(q04) == 10 and q04["emp_id"].nunique() == 10
+    )
     checks["ten SQL result CSVs exist"] = all(
         (analytics_dir / f"{query}.csv").exists()
         for query in query_results["query"].tolist()
@@ -135,6 +201,8 @@ def main() -> None:
 
     published_dashboard = DELIVERABLES / "PeopleOps_HR_Dashboard.html"
     published_deck = DELIVERABLES / "PeopleOps_HR_Pipeline_Results.pptx"
+    presentation_pdf = ROOT / "presentation" / "slides.pdf"
+    published_pdf = DELIVERABLES / "PeopleOps_HR_Pipeline_Results.pdf"
     checks["dashboard copied to submission deliverables"] = (
         published_dashboard.exists()
         and dashboard.exists()
@@ -144,6 +212,12 @@ def main() -> None:
         published_deck.exists()
         and deck.exists()
         and published_deck.read_bytes() == deck.read_bytes()
+    )
+    checks["six-slide PDF exists and is published"] = (
+        presentation_pdf.exists()
+        and presentation_pdf.read_bytes().startswith(b"%PDF-")
+        and published_pdf.exists()
+        and published_pdf.read_bytes() == presentation_pdf.read_bytes()
     )
     erd = ROOT / "warehouse" / "erd.svg"
     checks["rendered warehouse ER diagram exists"] = (

@@ -20,6 +20,23 @@ def run_script(path: Path) -> None:
     subprocess.run([sys.executable, str(path)], check=True, cwd=ROOT)
 
 
+def run_powershell_script(path: Path) -> None:
+    if sys.platform != "win32":
+        raise RuntimeError("Exporting the required submission PDF needs Windows PowerPoint.")
+    subprocess.run(
+        [
+            "powershell.exe",
+            "-NoProfile",
+            "-ExecutionPolicy",
+            "Bypass",
+            "-File",
+            str(path),
+        ],
+        check=True,
+        cwd=ROOT,
+    )
+
+
 def main() -> None:
     print("\n[1/11] Loading untouched raw source files")
     load_main()
@@ -41,12 +58,17 @@ def main() -> None:
     dashboard_main()
     run_script(ROOT / "presentation" / "build_findings.py")
     run_script(ROOT / "presentation" / "build_deck.py")
+    run_powershell_script(ROOT / "presentation" / "export_pdf.ps1")
 
     DELIVERABLES.mkdir(exist_ok=True)
     shutil.copy2(ROOT / "web" / "dashboard.html", DELIVERABLES / "PeopleOps_HR_Dashboard.html")
     shutil.copy2(
         ROOT / "presentation" / "PeopleOps_HR_Pipeline_Results.pptx",
         DELIVERABLES / "PeopleOps_HR_Pipeline_Results.pptx",
+    )
+    shutil.copy2(
+        ROOT / "presentation" / "slides.pdf",
+        DELIVERABLES / "PeopleOps_HR_Pipeline_Results.pdf",
     )
     print(f"\n[10/11] Published verified files to {DELIVERABLES}")
     print("\n[11/11] Running project acceptance tests")
