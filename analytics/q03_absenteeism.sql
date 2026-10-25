@@ -1,2 +1,3 @@
 -- Generated executable query. Run with SQLite against indus_weave.db.
+-- Absent days are divided by scheduled workdays; approved leave, holidays and weekly offs are excluded by attendance status.
 SELECT d.plant_name,substr(dt.full_date,1,7) month,SUM(a.status='Absent') absent_days,SUM(a.status IN ('Present','Absent','Missing Punch')) scheduled_workdays,ROUND(100.0*SUM(a.status='Absent')/NULLIF(SUM(a.status IN ('Present','Absent','Missing Punch')),0),2) absenteeism_pct FROM fact_attendance_daily a JOIN dim_date dt ON dt.date_key=a.date_key JOIN dim_employee e ON e.employee_key=a.employee_key JOIN dim_department d ON d.department_key=e.department_key GROUP BY d.plant_name,substr(dt.full_date,1,7) ORDER BY month,d.plant_name;

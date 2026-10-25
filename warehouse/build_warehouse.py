@@ -9,7 +9,7 @@ def main():
  for c in ['effective_from','effective_to']: hist[c]=pd.to_datetime(hist[c],errors='coerce')
  with sqlite3.connect(DB) as con:
   con.execute('PRAGMA foreign_keys=ON')
-  for t in ['fact_attendance_daily','fact_leave_day','fact_overtime_approved','fact_payroll_line','dim_employee','dim_department','dim_shift','dim_date','dq_results','staging_monthly_headcount','staging_separations','staging_employee_entitlement','staging_overtime_reconciliation']:
+  for t in ['fact_attendance_daily','fact_leave_day','fact_overtime_approved','fact_payroll_line','dim_employee','dim_department','dim_shift','dim_date','dq_results','staging_monthly_headcount','staging_separations','staging_employee_entitlement','staging_employee_month_department','staging_overtime_reconciliation']:
    con.execute(f'DROP TABLE IF EXISTS {t}')
   con.executescript('''
   CREATE TABLE dim_department(department_key INTEGER PRIMARY KEY,department_id TEXT NOT NULL UNIQUE,department_name TEXT NOT NULL,plant_name TEXT NOT NULL,cost_center TEXT);
@@ -25,6 +25,7 @@ def main():
   CREATE TABLE staging_monthly_headcount(month_start TEXT,department_name TEXT,opening_headcount INTEGER,closing_headcount INTEGER);
   CREATE TABLE staging_separations(emp_id TEXT,department_name TEXT,month_start TEXT,separation_date TEXT);
   CREATE TABLE staging_employee_entitlement(emp_id TEXT,annual_leave_entitlement_days INTEGER);
+  CREATE TABLE staging_employee_month_department(emp_id TEXT NOT NULL,month_start TEXT NOT NULL,department_id TEXT NOT NULL,department_key INTEGER NOT NULL,department_name TEXT NOT NULL,as_of_date TEXT NOT NULL,PRIMARY KEY(emp_id,month_start));
   CREATE TABLE staging_overtime_reconciliation(month TEXT,department_name TEXT,computed_overtime_value REAL,paid_overtime_value REAL,computed_hours REAL,approved_hours REAL,paid_hours REAL);
   ''')
   drows=[(i+1,r.dept_id,r.dept_name,r.plant,r.cost_center) for i,r in enumerate(depts.itertuples(index=False))]
@@ -105,6 +106,22 @@ def main():
   for eid,g in hist.sort_values(['emp_id','effective_from']).groupby('emp_id'):
    hist_intervals[eid]=[(r.effective_from,r.effective_to,r.dept_id) for r in g.itertuples(index=False)]
   emp_rows=list(emp.itertuples(index=False))
+  department_name_by_id={row[1]:row[2] for row in drows}
+  month_department_rows=[]
+  for month_start in pd.date_range('2026-04-01','2026-09-01',freq='MS'):
+   month_end=month_start+pd.offsets.MonthEnd(0)
+   month_label=month_start.strftime('%Y-%m-%d')
+   for employee in emp_rows:
+    if pd.isna(employee.hire_date) or employee.hire_date>month_end:
+     continue
+    as_of=min(month_end,employee.separation_date) if pd.notna(employee.separation_date) else month_end
+    department_id=dept_at(employee.emp_id,as_of)
+    department_key=deptkey.get(department_id)
+    if department_key is None:
+     continue
+    department_name=department_name_by_id[department_id]
+    month_department_rows.append((employee.emp_id,month_label,department_id,department_key,department_name,as_of.strftime('%Y-%m-%d')))
+  con.executemany('INSERT INTO staging_employee_month_department VALUES(?,?,?,?,?,?)',month_department_rows)
   for m in pd.date_range('2026-04-01','2026-09-01',freq='MS'):
    for label,asof in [('opening',m-pd.Timedelta(days=1)),('closing',m+pd.offsets.MonthEnd(0))]:
     cnt={}
@@ -122,8 +139,22 @@ def main():
       if opening or closing: con.execute('INSERT INTO staging_monthly_headcount VALUES(?,?,?,?)',(m.strftime('%Y-%m-%d'),dept.dept_name,opening,closing))
   print('headcount done',flush=True)
   # Reconciliation helper uses HOURS for a valid like-for-like comparison.
-  att_agg=pd.read_sql_query("SELECT substr(dt.full_date,1,7) month,d.department_name,SUM(a.computed_overtime_hours) computed_hours FROM fact_attendance_daily a JOIN dim_date dt ON dt.date_key=a.date_key JOIN dim_employee e ON e.employee_key=a.employee_key JOIN dim_department d ON d.department_key=e.department_key GROUP BY month,d.department_name",con)
-  approved_agg=pd.read_sql_query("SELECT substr(dt.full_date,1,7) month,d.department_name,SUM(o.approved_hours) approved_hours FROM fact_overtime_approved o JOIN dim_date dt ON dt.date_key=o.date_key JOIN dim_employee e ON e.emp_id=o.emp_id JOIN dim_department d ON d.department_key=e.department_key GROUP BY month,d.department_name",con)
+  att_agg=pd.read_sql_query("""WITH employee_month AS (
+    SELECT a.emp_id,substr(dt.full_date,1,7) month,SUM(a.computed_overtime_hours) computed_hours
+    FROM fact_attendance_daily a JOIN dim_date dt ON dt.date_key=a.date_key
+    GROUP BY a.emp_id,substr(dt.full_date,1,7))
+    SELECT em.month,md.department_name,SUM(em.computed_hours) computed_hours
+    FROM employee_month em JOIN staging_employee_month_department md
+      ON md.emp_id=em.emp_id AND substr(md.month_start,1,7)=em.month
+    GROUP BY em.month,md.department_name""",con)
+  approved_agg=pd.read_sql_query("""WITH employee_month AS (
+    SELECT o.emp_id,substr(dt.full_date,1,7) month,SUM(o.approved_hours) approved_hours
+    FROM fact_overtime_approved o JOIN dim_date dt ON dt.date_key=o.date_key
+    GROUP BY o.emp_id,substr(dt.full_date,1,7))
+    SELECT em.month,md.department_name,SUM(em.approved_hours) approved_hours
+    FROM employee_month em JOIN staging_employee_month_department md
+      ON md.emp_id=em.emp_id AND substr(md.month_start,1,7)=em.month
+    GROUP BY em.month,md.department_name""",con)
   paid_agg=pd.read_sql_query("SELECT substr(p.month_start,1,7) month,d.department_name,SUM(p.units) paid_hours FROM fact_payroll_line p JOIN dim_department d ON d.department_key=p.department_key WHERE upper(p.pay_component)='OVERTIME' GROUP BY month,d.department_name",con)
   rec=att_agg.merge(approved_agg,on=['month','department_name'],how='outer').merge(paid_agg,on=['month','department_name'],how='outer').fillna(0)
   con.executemany('INSERT INTO staging_overtime_reconciliation VALUES(?,?,?,?,?,?,?)',[(r.month,r.department_name,float(r.computed_hours),float(r.paid_hours),float(r.computed_hours),float(r.approved_hours),float(r.paid_hours)) for r in rec.itertuples(index=False)])

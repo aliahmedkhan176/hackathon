@@ -1,2 +1,3 @@
 -- Generated executable query. Run with SQLite against indus_weave.db.
+-- Ranks employees by count of Present days with positive late_minutes; grace-adjusted late minutes are also shown.
 SELECT a.emp_id,e.employee_name,d.department_name,COUNT(*) late_arrival_days,SUM(a.late_minutes) total_late_minutes FROM fact_attendance_daily a JOIN dim_employee e ON e.employee_key=a.employee_key JOIN dim_department d ON d.department_key=e.department_key JOIN dim_date dt ON dt.date_key=a.date_key WHERE a.status='Present' AND a.late_minutes>0 AND dt.full_date BETWEEN '2026-04-01' AND '2026-09-30' GROUP BY a.emp_id,e.employee_name,d.department_name ORDER BY late_arrival_days DESC,total_late_minutes DESC LIMIT 10;

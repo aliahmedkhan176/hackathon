@@ -75,9 +75,11 @@ def main() -> None:
         ).fetchall())
         top_findings = {
             "paid_after_separation": conn.execute(
-                "SELECT COUNT(*) FROM fact_payroll_line "
+                "SELECT COUNT(*) FROM (SELECT p.emp_id,p.month_start FROM fact_payroll_line "
                 "p JOIN staging_separations s USING(emp_id) "
-                "WHERE date(p.month_start)>date(s.separation_date,'start of month') AND p.amount<>0"
+                "WHERE date(p.month_start)>date(s.separation_date,'start of month') "
+                "AND upper(p.component_type)='EARNING' AND p.amount>0 "
+                "GROUP BY p.emp_id,p.month_start)"
             ).fetchone()[0],
             "annual_leave_flags": conn.execute(
                 "SELECT COUNT(*) FROM (SELECT u.emp_id FROM "
@@ -89,7 +91,8 @@ def main() -> None:
             ).fetchone()[0],
             "zero_present_payroll": int(sum(
                 row["emp_id"] is not None for row in conn.execute(
-                    "SELECT DISTINCT p.emp_id FROM fact_payroll_line p WHERE p.amount<>0 "
+                    "SELECT DISTINCT p.emp_id,substr(p.month_start,1,7) month "
+                    "FROM fact_payroll_line p WHERE upper(p.component_type)='EARNING' AND p.amount>0 "
                     "AND NOT EXISTS (SELECT 1 FROM fact_attendance_daily a JOIN dim_date d "
                     "ON d.date_key=a.date_key WHERE a.emp_id=p.emp_id "
                     "AND substr(d.full_date,1,7)=substr(p.month_start,1,7) AND a.status='Present')"
@@ -215,7 +218,7 @@ def main() -> None:
         ),
         (
             f"{top_findings['paid_after_separation']:,}",
-            "Non-zero payroll rows after separation month",
+            "Earnings in months after separation",
             "Evidence: q08_paid_after_separation.csv",
             "Validate final-pay policy, cutoff and last-working-day treatment.",
         ),

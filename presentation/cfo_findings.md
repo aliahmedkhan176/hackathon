@@ -9,7 +9,7 @@ These are review signals, not findings of misconduct.
 
 2. **Single-punch days create a substantial attendance review queue.** **26,592** employee-days are classified `Missing Punch`. Evidence: [`review_missing_punches.csv`](../results/analytics/review_missing_punches.csv) breaks them down by month, plant and department. Action: investigate repeated device/employee patterns, gateway uptime and enrollment before making attendance adjustments.
 
-3. **Post-separation payroll rows require employee-level validation.** **126** non-zero payroll rows fall after the separation month under the query's definition. Evidence: [`q08_paid_after_separation.csv`](../results/analytics/q08_paid_after_separation.csv). Action: check final-pay policy, payroll cutoff and last-working-day treatment before escalation.
+3. **Post-separation earnings require employee-level validation.** **21** employee-months have positive EARNING lines after the separation month. Evidence: [`q08_paid_after_separation.csv`](../results/analytics/q08_paid_after_separation.csv). Payroll is monthly, so the separation month itself is not enough to prove payment occurred after the last day worked. Action: check final-pay policy and payroll cutoff before escalation.
 
 ## Additional indicators
 

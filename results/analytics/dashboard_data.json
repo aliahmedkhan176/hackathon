@@ -503,6 +503,20 @@
       "failed_rows": 0,
       "status": "PASS",
       "details": "warehouse=53617; staging=53617"
+    },
+    {
+      "check_name": "monthly_overtime_reconciliation_preserves_totals",
+      "table_name": "staging_overtime_reconciliation",
+      "failed_rows": 0,
+      "status": "PASS",
+      "details": "fact computed/approved/paid=(133718.5, 36401.5, 36401.5); monthly totals=(133718.5, 36401.5, 36401.5)"
+    },
+    {
+      "check_name": "approved_overtime_has_month_department",
+      "table_name": "fact_overtime_approved",
+      "failed_rows": 0,
+      "status": "PASS",
+      "details": "each approved OT employee-month maps to month-end or last-working-day department"
     }
   ],
   "query_tests": [
@@ -540,7 +554,7 @@
       "query": "q06_paid_ot_exceeds_computed",
       "status": "PASS",
       "rows": 0,
-      "columns": 5
+      "columns": 6
     },
     {
       "query": "q07_paid_zero_attendance",
@@ -551,7 +565,7 @@
     {
       "query": "q08_paid_after_separation",
       "status": "PASS",
-      "rows": 126,
+      "rows": 21,
       "columns": 5
     },
     {

@@ -1,1 +1,1 @@
-month,department_name,computed_hours,paid_hours,excess_pct
+month,department_name,computed_hours,paid_hours,excess_pct,exception_type

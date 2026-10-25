@@ -50,10 +50,60 @@ def main() -> None:
     checks["all ten scored SQL questions pass"] = (
         len(query_results) == 10 and (query_results["status"] == "PASS").all()
     )
+    query_files_execute = True
+    with sqlite3.connect(DB) as conn:
+        for query_name in query_results["query"]:
+            sql_file = ROOT / "analytics" / f"{query_name}.sql"
+            output_file = analytics_dir / f"{query_name}.csv"
+            if not sql_file.exists() or not output_file.exists():
+                query_files_execute = False
+                break
+            cursor = conn.execute(sql_file.read_text(encoding="utf-8"))
+            expected_output = pd.read_csv(output_file)
+            if (
+                [description[0] for description in cursor.description or []]
+                != expected_output.columns.tolist()
+                or len(cursor.fetchall()) != len(expected_output)
+            ):
+                query_files_execute = False
+                break
+    checks["all ten checked-in SQL files execute to their CSV outputs"] = query_files_execute
     checks["ten SQL result CSVs exist"] = all(
         (analytics_dir / f"{query}.csv").exists()
         for query in query_results["query"].tolist()
     )
+    paid_without_attendance = pd.read_csv(
+        analytics_dir / "q07_paid_zero_attendance.csv"
+    )
+    paid_after_separation = pd.read_csv(
+        analytics_dir / "q08_paid_after_separation.csv"
+    )
+    checks["zero-attendance report is based on positive earnings"] = (
+        {"emp_id", "month", "paid_earnings", "present_days"}.issubset(
+            paid_without_attendance.columns
+        )
+        and (paid_without_attendance["present_days"] == 0).all()
+        and (paid_without_attendance["paid_earnings"] > 0).all()
+    )
+    checks["post-separation report contains earnings only"] = (
+        {"emp_id", "month_start", "separation_date", "post_separation_earnings", "earning_line_count"}.issubset(
+            paid_after_separation.columns
+        )
+        and (paid_after_separation["post_separation_earnings"] > 0).all()
+        and not paid_after_separation.duplicated(["emp_id", "month_start"]).any()
+    )
+    with sqlite3.connect(DB) as conn:
+        checks["overtime reconciliation preserves total hours"] = (
+            conn.execute(
+            """SELECT
+                 abs((SELECT SUM(computed_hours) FROM staging_overtime_reconciliation) -
+                     (SELECT SUM(computed_overtime_hours) FROM fact_attendance_daily)) < 0.01
+                 AND abs((SELECT SUM(approved_hours) FROM staging_overtime_reconciliation) -
+                         (SELECT SUM(approved_hours) FROM fact_overtime_approved)) < 0.01
+                 AND abs((SELECT SUM(paid_hours) FROM staging_overtime_reconciliation) -
+                         (SELECT SUM(units) FROM fact_payroll_line WHERE upper(pay_component)='OVERTIME')) < 0.01"""
+            ).fetchone()[0] == 1
+        )
     checks["supplemental missing-punch evidence exists"] = (
         (analytics_dir / "review_missing_punches.csv").exists()
         and (ROOT / "analytics" / "review_missing_punches.sql").exists()

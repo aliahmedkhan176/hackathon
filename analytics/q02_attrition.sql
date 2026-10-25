@@ -1,2 +1,3 @@
 -- Generated executable query. Run with SQLite against indus_weave.db.
+-- Separations are attributed to last-working-day department; rate uses separations / average opening and closing headcount.
 SELECT h.month_start,h.department_name,COUNT(DISTINCT s.emp_id) separations,(h.opening_headcount+h.closing_headcount)/2.0 average_headcount,ROUND(100.0*COUNT(DISTINCT s.emp_id)/NULLIF((h.opening_headcount+h.closing_headcount)/2.0,0),2) attrition_rate_pct FROM staging_monthly_headcount h LEFT JOIN staging_separations s ON s.department_name=h.department_name AND s.month_start=h.month_start GROUP BY h.month_start,h.department_name ORDER BY h.month_start,h.department_name;

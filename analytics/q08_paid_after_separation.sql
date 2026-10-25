@@ -1,2 +1,3 @@
 -- Generated executable query. Run with SQLite against indus_weave.db.
-SELECT p.emp_id,p.month_start,s.separation_date,p.pay_component,p.amount FROM fact_payroll_line p JOIN staging_separations s ON s.emp_id=p.emp_id WHERE date(p.month_start)>date(s.separation_date,'start of month') AND p.amount<>0 ORDER BY p.emp_id,p.month_start;
+-- Returns positive EARNING totals by employee/payroll month strictly after the separation month; monthly payroll cannot establish whether same-month pay was issued after the exact separation date.
+SELECT p.emp_id,p.month_start,s.separation_date,SUM(p.amount) post_separation_earnings,COUNT(*) earning_line_count FROM fact_payroll_line p JOIN staging_separations s ON s.emp_id=p.emp_id WHERE date(p.month_start)>date(s.separation_date,'start of month') AND upper(p.component_type)='EARNING' AND p.amount>0 GROUP BY p.emp_id,p.month_start,s.separation_date ORDER BY p.emp_id,p.month_start;

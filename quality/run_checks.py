@@ -229,6 +229,49 @@ def main(final: bool = True) -> None:
             for name, actual, expected in count_checks:
                 record(name, "warehouse", abs(actual - expected), f"warehouse={actual}; staging={expected}")
 
+            overtime_reconciliation = conn.execute(
+                """SELECT
+                     (SELECT COALESCE(SUM(computed_overtime_hours),0)
+                        FROM fact_attendance_daily) AS fact_computed,
+                     (SELECT COALESCE(SUM(approved_hours),0)
+                        FROM fact_overtime_approved) AS fact_approved,
+                     (SELECT COALESCE(SUM(units),0)
+                        FROM fact_payroll_line WHERE upper(pay_component)='OVERTIME') AS fact_paid,
+                     (SELECT COALESCE(SUM(computed_hours),0)
+                        FROM staging_overtime_reconciliation) AS monthly_computed,
+                     (SELECT COALESCE(SUM(approved_hours),0)
+                        FROM staging_overtime_reconciliation) AS monthly_approved,
+                     (SELECT COALESCE(SUM(paid_hours),0)
+                        FROM staging_overtime_reconciliation) AS monthly_paid"""
+            ).fetchone()
+            difference = sum(
+                abs(overtime_reconciliation[index] - overtime_reconciliation[index + 3])
+                for index in range(3)
+            )
+            record(
+                "monthly_overtime_reconciliation_preserves_totals",
+                "staging_overtime_reconciliation",
+                int(difference > 0.01),
+                "fact computed/approved/paid="
+                f"{overtime_reconciliation[:3]}; monthly totals={overtime_reconciliation[3:]}",
+            )
+
+            unmapped_overtime_months = conn.execute(
+                """SELECT COUNT(*) FROM (
+                     SELECT emp_id,substr(full_date,1,7) month
+                     FROM fact_overtime_approved o JOIN dim_date d ON d.date_key=o.date_key
+                     GROUP BY emp_id,substr(full_date,1,7)
+                     EXCEPT
+                     SELECT emp_id,substr(month_start,1,7)
+                     FROM staging_employee_month_department)"""
+            ).fetchone()[0]
+            record(
+                "approved_overtime_has_month_department",
+                "fact_overtime_approved",
+                unmapped_overtime_months,
+                "each approved OT employee-month maps to month-end or last-working-day department",
+            )
+
             conn.execute("DROP TABLE IF EXISTS dq_results")
             conn.execute("""CREATE TABLE dq_results(
                 dq_id INTEGER PRIMARY KEY, check_name TEXT NOT NULL, table_name TEXT NOT NULL,

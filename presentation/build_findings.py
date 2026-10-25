@@ -24,9 +24,11 @@ def main() -> None:
                 "SELECT COUNT(*) FROM fact_attendance_daily WHERE status='Missing Punch'"
             ).fetchone()[0],
             "paid_after_separation": conn.execute(
-                "SELECT COUNT(*) FROM staging_separations s JOIN fact_payroll_line p "
-                "ON p.emp_id=s.emp_id WHERE date(p.month_start)>date(s.separation_date,'start of month') "
-                "AND p.amount<>0"
+                "SELECT COUNT(*) FROM (SELECT p.emp_id,p.month_start FROM staging_separations s "
+                "JOIN fact_payroll_line p ON p.emp_id=s.emp_id "
+                "WHERE date(p.month_start)>date(s.separation_date,'start of month') "
+                "AND upper(p.component_type)='EARNING' AND p.amount>0 "
+                "GROUP BY p.emp_id,p.month_start)"
             ).fetchone()[0],
             "annual_leave_flags": conn.execute(
                 "SELECT COUNT(*) FROM (SELECT u.emp_id FROM "
@@ -43,7 +45,8 @@ def main() -> None:
             "paid_zero_attendance": conn.execute(
                 "SELECT COUNT(*) FROM (SELECT emp_id,month FROM "
                 "(SELECT emp_id,substr(month_start,1,7) month FROM fact_payroll_line "
-                "WHERE amount<>0 GROUP BY emp_id,substr(month_start,1,7)) p "
+                "WHERE upper(component_type)='EARNING' AND amount>0 "
+                "GROUP BY emp_id,substr(month_start,1,7)) p "
                 "WHERE NOT EXISTS (SELECT 1 FROM fact_attendance_daily a JOIN dim_date d "
                 "ON d.date_key=a.date_key WHERE a.emp_id=p.emp_id AND substr(d.full_date,1,7)=p.month "
                 "AND a.status='Present'))"
@@ -62,7 +65,7 @@ These are review signals, not findings of misconduct.
 
 2. **Single-punch days create a substantial attendance review queue.** **{metrics['missing_punch']:,}** employee-days are classified `Missing Punch`. Evidence: [`review_missing_punches.csv`](../results/analytics/review_missing_punches.csv) breaks them down by month, plant and department. Action: investigate repeated device/employee patterns, gateway uptime and enrollment before making attendance adjustments.
 
-3. **Post-separation payroll rows require employee-level validation.** **{metrics['paid_after_separation']:,}** non-zero payroll rows fall after the separation month under the query's definition. Evidence: [`q08_paid_after_separation.csv`](../results/analytics/q08_paid_after_separation.csv). Action: check final-pay policy, payroll cutoff and last-working-day treatment before escalation.
+3. **Post-separation earnings require employee-level validation.** **{metrics['paid_after_separation']:,}** employee-months have positive EARNING lines after the separation month. Evidence: [`q08_paid_after_separation.csv`](../results/analytics/q08_paid_after_separation.csv). Payroll is monthly, so the separation month itself is not enough to prove payment occurred after the last day worked. Action: check final-pay policy and payroll cutoff before escalation.
 
 ## Additional indicators
 
